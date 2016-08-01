@@ -19,6 +19,9 @@ RSpec.describe Qiita::Elasticsearch::QueryBuilder do
     let(:default_fields) do
     end
 
+    let(:default_sorts) do
+    end
+
     let(:int_fields) do
     end
 
@@ -35,6 +38,7 @@ RSpec.describe Qiita::Elasticsearch::QueryBuilder do
         filterable_fields: filterable_fields,
         hierarchal_fields: hierarchal_fields,
         default_fields: default_fields,
+        default_sorts: default_sorts,
         int_fields: int_fields,
         date_fields: date_fields,
         time_zone: time_zone,
@@ -903,6 +907,41 @@ RSpec.describe Qiita::Elasticsearch::QueryBuilder do
 
       it "returns default sort option" do
         expect(query.sort).to eq([{ "created_at" => "desc" }, "_score"])
+      end
+    end
+
+    context "with default_sorts property" do
+      let(:default_sorts) do
+        [{ "_score" => "desc" }]
+      end
+
+      let(:query_string) do
+        "a"
+      end
+
+      it "returns a Query that has the specified sort default option" do
+        expect(query.sort).to eq([{ "_score" => "desc" }])
+      end
+    end
+
+    context "with default_sorts property and override sort:created-asc" do
+      let(:default_sorts) do
+        [{ "_score" => "desc" }]
+      end
+
+      let(:query_string) do
+        "sort:created-asc"
+      end
+
+      it "returns a Query overrided to sort in updated order" do
+        expect(query.sort).to eq(
+          [
+            {
+              "created_at" => "asc",
+            },
+            "_score",
+          ],
+        )
       end
     end
 
