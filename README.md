@@ -33,6 +33,16 @@ query_builder.build("a")
 #=> {"multi_match"=>{"fields"=>["body", "title"], "query"=>"a"}}
 ```
 
+### default_sorts
+Pass `:default_sorts` option to tell default sort orders (default: `[{ "created_at" => "desc" }, "_score"]`).
+
+```rb
+query_builder = Qiita::Elasticsearch::QueryBuilder.new(default_sorts: [{ "_score" => "desc" }])
+
+query_builder.build("a")
+#=> {"match"=>{"_all"=>"a"}, "sort"=>[{"_score"=>"desc"}]}
+```
+
 ### filterable_fields
 Pass `:filterable_fields` option to enable filtered queries like `tag:Ruby`.
 

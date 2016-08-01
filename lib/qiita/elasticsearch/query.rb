@@ -70,7 +70,7 @@ module Qiita
 
       # @return [Array] sort property for request body for Elasticsearch
       def sort
-        SORTS_TABLE[sort_term] || DEFAULT_SORT
+        SORTS_TABLE[sort_term] || @query_builder_options[:default_sorts] || DEFAULT_SORT
       end
 
       def sort_term
